@@ -14,7 +14,6 @@ Surfaces.prototype.ellipticparabaloid = (count = 20, color = '#7B68EE') => {
             const x = R * Math.sin(i) * Math.cos(j) / 4;
             const y = R * Math.sin(i) * Math.sin(j) / 4;
             const z = x * x / 2 + y * y / 2;;
-            if (x >= start && x <= end && y >= start && y <= end)  {continue;}
             points.push(new Point(x, y, z));
         }
     }
@@ -32,9 +31,19 @@ Surfaces.prototype.ellipticparabaloid = (count = 20, color = '#7B68EE') => {
     //Полигоны
     
     for (let i = 0; i < points.length; i++) {
-        if ((i + 1 + count) < points.length && (i + 1) % count !== 0) {
+        if ((i + 1 + count) < ((points.length/2)-(count)) && (i + 1) % count !== 0) {
             polygons.push(new Polygon([i, i + 1, i + 1 + count, i + count], color))
-        } else if ((i + count) < points.length && (i + 1) % count === 0) {
+        } else if ((i + count) < ((points.length/2)-(count)) && (i + 1) % count === 0) {
+            polygons.push(new Polygon([i, i + 1 - count, i + 1, i + count], color))
+        }
+        if ((i + 1 + count) > ((points.length/2)-(count)) && (i + 1 + count) < ((points.length/2)+(count*2)) && (i + 1) % count !== 0) {
+            polygons.push(new Polygon([i, i + 1, i + 1 + count, i + count], color))
+        } else if ((i + count) > ((points.length/2)-(count)) && (i + count) < ((points.length/2)+(count*2)) && (i + 1) % count === 0) {
+            polygons.push(new Polygon([i, i + 1 - count, i + 1, i + count], color))
+        }
+        if ((i + 1 + count) > ((points.length/2)+(count*2)) && (i + 1 + count) < points.length && (i + 1) % count !== 0) {
+            polygons.push(new Polygon([i, i + 1, i + 1 + count, i + count], color))
+        } else if ((i + count) > ((points.length/2)+(count*2)) && (i + count) < points.length && (i + 1) % count === 0) {
             polygons.push(new Polygon([i, i + 1 - count, i + 1, i + count], color))
         }
     }
